@@ -1,7 +1,10 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from "@angular/http";
 import * as d3 from "d3";
 import { Observable } from "rxjs/Rx";
+import * as accounting from "accounting";
+
+import { API_SERVICE, ApiService } from "./api.service";
 
 const GET_CURRENCY_URL: string = "https://www.cryptonator.com/api/currencies";
 
@@ -11,33 +14,31 @@ const GET_CURRENCY_URL: string = "https://www.cryptonator.com/api/currencies";
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+    private total = 0;
     private containerWidth: number;
     private svg: any;
-    private headers: Headers;
     private currencies: { code: string, name: string }[];
     private selectedCode: string = "USD";
-
-    title = 'app works!';
+    private displayTotal: string = "0";
 
     @ViewChild("container")
     container: ElementRef;
 
-    constructor(private http: Http) {
-        //this.headers = new Headers({ 'Content-Type': 'application/json' });
+    constructor(@Inject(API_SERVICE)private apiService: ApiService) {
+
     }
 
     ngAfterViewInit(): void {
         //this.initializeSvg(500);
 
-        this.get<{ rows: [{ code: string, name: string }] }>(GET_CURRENCY_URL).subscribe(x => {
+        this.apiService.getCurrencies().subscribe(x => {
             this.currencies = x.rows;
         });
     }
 
-    get<TReturnType>(url: string): Observable<TReturnType> {
-        return this.http.get(url, new RequestOptions({ headers: this.headers, body: "" }))
-            .map(res => <TReturnType>res.json())
-            .catch(x => Observable.throw(x));
+    updateTotal(total: number): void {
+        this.total = total;
+        this.displayTotal = accounting.formatMoney(total);
     }
 
     initializeSvg(height: number, width: number = null): void {

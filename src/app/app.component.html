@@ -1,12 +1,12 @@
-<h2 class="text-center">Current Value: 0 {{selectedCode}}</h2>
-
+<h2 class="text-center">Current Value: {{displayTotal}} {{selectedCode}}</h2>
 <div class="container">
     <div class="row">
-        <div class="center-block text-center">
+        <div class="text-center">
             <currency-selector [currencies]="currencies" [(selectedCode)]="selectedCode"></currency-selector>
         </div>
     </div>
-
-    <holdings-input [currencies]="currencies"></holdings-input>
+    <div class="row">
+        <holdings-input [currencies]="currencies" [baseCurrency]="selectedCode" (onTotalChange)="updateTotal($event)"></holdings-input>
+    </div>
     <div #container></div>
 </div>

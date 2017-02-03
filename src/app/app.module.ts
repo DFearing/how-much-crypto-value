@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { CurrencySelectorComponent } from './currency-selector.component';
 import { HoldingsInputComponent } from './holdings-input.component';
 
+import { API_SERVICE, ApiService } from "./api.service";
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -18,7 +20,9 @@ import { HoldingsInputComponent } from './holdings-input.component';
         FormsModule,
         HttpModule
     ],
-    providers: [],
+    providers: [
+        { provide: API_SERVICE, useClass: ApiService }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

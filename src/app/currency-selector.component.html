@@ -1,4 +1,9 @@
-<label for="base">Show Value In:</label>
-<select id="base" [(ngModel)]="selectedCode" (change)="selectedCodeChange.emit($event.target.value)">
-    <option *ngFor="let currency of currencies" [value]="currency.code">{{currency.name}}</option>
-</select>
+
+<div class="col-md-3 col-center-block">
+    <div class="form-group">
+        <label for="base">Show Value In:</label>
+        <select id="base" [(ngModel)]="selectedCode" (change)="selectedCodeChange.emit($event.target.value)" class="form-control" tabindex="0">
+            <option *ngFor="let currency of currencies" [value]="currency.code">{{currency.name}}</option>
+        </select>
+    </div>
+</div>
