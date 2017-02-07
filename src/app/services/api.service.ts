@@ -3,8 +3,7 @@ import { Http, Headers, RequestOptions, Response } from "@angular/http";
 import * as d3 from "d3";
 import { Observable } from "rxjs/Rx";
 
-import { Currency } from "./currency.model";
-import { TickerData } from "./ticker-data.model";
+import { TickerData } from "../models/ticker-data.model";
 
 const GET_CURRENCY_URL: string = "https://www.cryptonator.com/api/currencies";
 const GET_TICKER_URL: string = "https://api.cryptonator.com/api/ticker/";
@@ -23,8 +22,8 @@ export class ApiService {
         return this.get<{ ticker: TickerData, success: boolean }>(`${GET_TICKER_URL}${base}-${target}`);
     }
 
-    getCurrencies(): Observable<{ rows: Currency[] }> {
-        return this.get<{ rows: Currency[] }>(GET_CURRENCY_URL)
+    getCurrencies(): Observable<{ rows: { code: string, name: string }[] }> {
+        return this.get<{ rows: { code: string, name: string }[] }>(GET_CURRENCY_URL)
     }
 
     private get<TReturnType>(url: string): Observable<TReturnType> {
