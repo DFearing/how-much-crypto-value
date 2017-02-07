@@ -16,7 +16,7 @@ export class HoldingsInputComponent {
 
     ngAfterViewInit(): void {
         this.onChange.debounceTime(500).subscribe(index => {
-            this.appService.calculateHoldingValue(index);
+            this.appService.update();
         });
     }
 }

@@ -1,4 +1,5 @@
 import { OpaqueToken, Injectable, Inject } from "@angular/core";
+import { Router, ActivatedRoute, NavigationExtras, Params } from "@angular/router";
 import { Subject, Observable, BehaviorSubject } from "rxjs/Rx";
 import * as accounting from "accounting";
 import * as _ from "underscore";
@@ -19,34 +20,47 @@ export class AppService {
 
     public total: number = 0;
     public displayTotal: string = "0.00 USD";
-    public targetCurrency: string = "USD";
+    public targetCurrency: string = "usd";
 
-    constructor(@Inject(API_SERVICE)private apiService: ApiService) {
+    constructor(private router: Router, private route: ActivatedRoute, @Inject(API_SERVICE)private apiService: ApiService) {
         
     }
 
-    initialize(): void {
+    public initialize(): void {
+        this.route.queryParams.subscribe(x => this.parseUrl(x));
+
         this.apiService.getCurrencies().subscribe(x => {
-            this._currencies.next(_.map(x.rows, y => { return { code: y.code, name: y.name }; }));
+            this._currencies.next(_.map(x.rows, y => { return { code: y.code.toLowerCase(), name: y.name }; }));
         });
     }
 
-    changeTarget(currency: string): void {
-        this.targetCurrency = currency;
+    public update(): void {
+        this.updateUrl();
+    }
 
-        for(let i = 0; i < this._holdings.getValue().length; i++) {
-            this.calculateHoldingValue(i);
+    private changeTarget(currency: string, updateUrl: boolean = true): void {
+        this.targetCurrency = currency;
+        this.calculateHoldings();
+
+        if (updateUrl) { 
+            this.updateUrl();
         }
     }
 
-    addHoldings(): void {
+    private calculateHoldings(): void {
+        for(let i = 0; i < this._holdings.getValue().length; i++) {
+            this.calculateHoldingValue(i, false);
+        }
+    }
+
+    private addHoldings(holding: Holding = null): void {
         var current = this._holdings.getValue();
-        current.push(new Holding());
+        current.push(holding || new Holding());
 
         this._holdings.next(current);
     }
 
-    calculateHoldingValue(index: number) : void {
+    private calculateHoldingValue(index: number, updateUrl: boolean = true) : void {
         var current = this._holdings.getValue();
 
         this.apiService.getTickerData(current[index].base, this.targetCurrency).subscribe(result => {
@@ -54,15 +68,47 @@ export class AppService {
                 // Update Holding's Value
                 current[index].value = current[index].quantity * result.ticker.price;
                 current[index].displayValue = this.formatMoney(current[index].value, this.targetCurrency);
-
-                // Update Totals
-                this.total = _.reduce(current, (memo: number, x: Holding) => memo + x.value, 0);
+                
+                // Update Total
+                this.total = _.reduce(this._holdings.getValue(), (memo: number, x: Holding) => memo + x.value, 0);
                 this.displayTotal = this.formatMoney(this.total, this.targetCurrency);
             }
         });
     }
 
-    formatMoney(value: number, symbol: string): string {
-        return accounting.formatMoney(value, { symbol: symbol, format: "%v %s" });
+    private formatMoney(value: number, symbol: string): string {
+        return accounting.formatMoney(value, { symbol: symbol.toUpperCase(), format: "%v %s" });
+    }
+
+    private parseUrl(params: Params): void {
+        this._holdings.next([]);
+
+        if (params["t"]) {
+            this.changeTarget(params["t"].toLowerCase(), false);
+        }
+
+        for(var i = 0; i < 100; i++) {
+            if (params[`b${i}`] && params[`q${i}`]) {
+                this.addHoldings(new Holding(params[`b${i}`].toLowerCase(), params[`q${i}`]));
+            } else {
+                i = 100;
+            }
+        }
+
+        this.calculateHoldings();
+    }
+
+    private updateUrl(): void {
+        let navigationExtras: NavigationExtras = {
+            queryParams: { "t": this.targetCurrency },
+            preserveQueryParams: false
+        };
+
+        this._holdings.getValue().forEach((holding, index) => {
+            navigationExtras.queryParams[`b${index}`] = holding.base;
+            navigationExtras.queryParams[`q${index}`] = holding.quantity;
+        });
+
+        this.router.navigate(["/"], navigationExtras);
     }
 }

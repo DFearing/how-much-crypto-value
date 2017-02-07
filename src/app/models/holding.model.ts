@@ -4,9 +4,9 @@ export class Holding {
     value: number;
     displayValue: string;
 
-    constructor() {
-        this.base = "BTC";
-        this.quantity = 0;
+    constructor(base: string = "btc", quantity: number = 0) {
+        this.base = base;
+        this.quantity = quantity;
         this.value = 0;
         this.displayValue = "0.00";
     }

@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <label for="target-{{i}}">Crypto:</label>
                 <select class="form-control" id="target-{{i}}" [(ngModel)]="holding.base" (change)="onChange.next(i)">
-                    <option  *ngFor="let currency of appService.currencies | async" [value]="currency.code">{{currency.name}}</option>
+                    <option  *ngFor="let currency of appService.currencies | async" [value]="currency.code">{{currency.name}} ({{currency.code.toUpperCase()}})</option>
                 </select>
             </div>
         </div>

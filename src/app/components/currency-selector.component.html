@@ -3,7 +3,7 @@
     <div class="form-group">
         <label for="base">Show Value In:</label>
         <select id="base" [(ngModel)]="targetCurrency" class="form-control" tabindex="0" (change)="appService.changeTarget($event.target.value)">
-            <option *ngFor="let currency of appService.currencies | async" [value]="currency.code">{{currency.name}} ({{currency.code}})</option>
+            <option *ngFor="let currency of appService.currencies | async" [value]="currency.code">{{currency.name}} ({{currency.code.toUpperCase()}})</option>
         </select>
     </div>
 </div>
