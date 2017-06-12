@@ -1,0 +1,11 @@
+<h2 md-dialog-title>Crypto Holding</h2>
+<md-dialog-content>
+  <md-input-container>
+    <input mdInput placeholder="Quantity" [(ngModel)]="holding.quantity">
+  </md-input-container>
+  <app-currency-selector [selected]="holding.base" (onSelectionChange)="updateCurrency($event)"></app-currency-selector>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-raised-button [md-dialog-close]="true" (click)="save()">OK</button>
+  <button md-raised-button md-dialog-close>Cancel</button>
+</md-dialog-actions>

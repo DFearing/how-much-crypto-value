@@ -1,0 +1,15 @@
+<header>
+  <h1>How Much Crypto Value Do You Have?</h1>
+  <p>Use this simple site to calculate the current market value of your crypto holdings.</p>
+</header>
+
+<div class="current-value">
+  <app-current-value></app-current-value>
+  <button md-raised-button (click)="addHolding()">Add Crypto Holding</button>
+</div>
+
+<div class="card-grid" layout="horizontal" layout-align="center center">
+  <ng-template ngFor let-holding [ngForOf]="appService.holdingList | async">
+    <app-holding-card [holding]="holding"></app-holding-card>
+  </ng-template>
+</div>

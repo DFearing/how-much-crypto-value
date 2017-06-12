@@ -1,6 +1,7 @@
 export class Holding {
     base: string;
     quantity: number;
+	price: number;
     value: number;
     displayValue: string;
 
@@ -8,6 +9,7 @@ export class Holding {
         this.base = base;
         this.quantity = quantity;
         this.value = 0;
+		this.price = 0;
         this.displayValue = "0.00";
     }
 }

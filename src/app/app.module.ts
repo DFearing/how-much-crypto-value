@@ -1,35 +1,52 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MdButtonModule, MdCheckboxModule, MdSelectModule, MdDialogModule, MdInputModule, MdAutocompleteModule, MdCardModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
-import { RouterModule } from "@angular/router";
 
-import { ROUTES } from './app.routes';
+import { AppRootComponent } from './components/app-root.component';
 import { AppComponent } from './components/app.component';
-import { HomeComponent } from './components/home.component';
-import { CurrencySelectorComponent } from './components/currency-selector.component';
-import { HoldingsInputComponent } from './components/holdings-input.component';
-
-import { API_SERVICE, ApiService } from "./services/api.service";
-import { APP_SERVICE, AppService } from "./services/app.service";
+import { CurrentValueComponent } from './components/current-value/current-value.component';
+import { AppService } from './app.service';
+import { ApiService } from './api.service';
+import { AddEditHoldingComponent } from './components/add-edit-holding/add-edit-holding.component';
+import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
+import { HoldingCardComponent } from './components/holding-card/holding-card.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        CurrencySelectorComponent,
-        HoldingsInputComponent
-    ],
-    imports: [
-        RouterModule.forRoot(ROUTES),
-        BrowserModule,
-        FormsModule,
-        HttpModule
-    ],
-    providers: [
-        { provide: APP_SERVICE, useClass: AppService },
-        { provide: API_SERVICE, useClass: ApiService }
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppRootComponent,
+    AppComponent,
+    CurrentValueComponent,
+    AddEditHoldingComponent,
+    CurrencySelectorComponent,
+    HoldingCardComponent
+  ],
+  imports: [
+    RouterModule.forRoot([{ path: "", component: AppComponent }]),
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule,
+    MdDialogModule,
+    MdSelectModule,
+    MdButtonModule,
+    MdInputModule,
+    NoopAnimationsModule,
+    MdAutocompleteModule,
+    MdCardModule,
+    HttpModule
+  ],
+  providers: [
+    ApiService,
+    AppService
+  ],
+  bootstrap: [AppRootComponent],
+  entryComponents: [
+    AddEditHoldingComponent
+  ]
 })
 export class AppModule { }

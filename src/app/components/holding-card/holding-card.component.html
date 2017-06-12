@@ -1,0 +1,15 @@
+<md-card class="holding-card">
+  <md-card-header>
+    <md-card-title>{{holding.base | uppercase}} @ {{holding.value | currency:'USD':true}} </md-card-title>
+    <md-card-subtitle>{{holding.price | currency:'USD':true}} * {{holding.quantity}}</md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    <p>
+      Graph Coming Soon..
+    </p>
+  </md-card-content>
+  <md-card-actions>
+    <button md-button (click)="edit(holding)">EDIT</button>
+    <button md-button (click)="appService.removeHolding(holding)">REMOVE</button>
+  </md-card-actions>
+</md-card>
