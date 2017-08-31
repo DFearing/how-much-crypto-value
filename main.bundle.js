@@ -226,7 +226,6 @@ var AppService = (function () {
                 if (result.success) {
                     var holding = __WEBPACK_IMPORTED_MODULE_3_underscore__["findWhere"](_this.holdings, { base: result.ticker.base.toLowerCase() });
                     holding.price = result.ticker.price;
-                    holding.volume = result.ticker.volume;
                     holding.change = result.ticker.change;
                     holding.value = holding.quantity * holding.price;
                     _this.value += holding.value;
@@ -604,7 +603,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/holding-card/holding-card.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<md-card class=\"holding-card\">\r\n  <md-card-header>\r\n    <md-card-title class=\"header\">{{holding.base | uppercase}} @ {{holding.value | currency:'USD':true}} </md-card-title>\r\n    <md-card-subtitle></md-card-subtitle>\r\n  </md-card-header>\r\n  <md-card-content class=\"content\">\r\n    <p>Price: {{holding.price | currency:'USD':true}}, Qty: {{holding.quantity}}, Past Hour: <span class=\"price-change\" [class.positive]=\"holding.change > 0\" [class.negative]=\"holding.change < 0\">{{holding.change | currency:'USD':true}}</span></p>\r\n  </md-card-content>\r\n  <md-card-actions>\r\n    <button md-button (click)=\"edit()\" class=\"edit\">EDIT</button>\r\n    <button md-button (click)=\"remove()\" class=\"remove\">REMOVE</button>\r\n  </md-card-actions>\r\n</md-card>"
+module.exports = "<md-card class=\"holding-card\">\r\n  <md-card-header>\r\n    <md-card-title class=\"header\">{{holding.base | uppercase}} @ {{holding.value | currency:'USD':true}} </md-card-title>\r\n    <md-card-subtitle>\r\n    Qty: {{holding.quantity}}\r\n\r\n    </md-card-subtitle>\r\n  </md-card-header>\r\n  <md-card-content class=\"content\">\r\n    <p>Price: <strong>{{holding.price | currency:'USD':true}}</strong>, Past Hour: <strong><span class=\"price-change\" [class.positive]=\"holding.change > 0\" [class.negative]=\"holding.change < 0\">{{holding.change | currency:'USD':true}}</span></strong></p>\r\n  </md-card-content>\r\n  <md-card-actions>\r\n    <button md-button (click)=\"edit()\" class=\"edit\">EDIT</button>\r\n    <button md-button (click)=\"remove()\" class=\"remove\">REMOVE</button>\r\n  </md-card-actions>\r\n</md-card>"
 
 /***/ }),
 
@@ -700,7 +699,6 @@ var Holding = (function () {
         this.quantity = quantity;
         this.value = 0;
         this.price = 0;
-        this.volume = 0;
         this.change = 0;
     }
     return Holding;
